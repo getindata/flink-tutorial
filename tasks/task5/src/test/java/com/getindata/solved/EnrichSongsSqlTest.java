@@ -7,6 +7,7 @@ import org.apache.flink.test.util.MiniClusterWithClientResource;
 import org.apache.flink.types.Row;
 import org.apache.flink.util.CloseableIterator;
 import org.junit.ClassRule;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ class EnrichSongsSqlTest {
                     .build()
     );
 
+    @Disabled
     @Test
     public void shouldEnrichValidEvent() {
         // given: execution environment
@@ -57,6 +59,7 @@ class EnrichSongsSqlTest {
         assertEquals(160000, enrichedSongs.get(0).getField(LENGTH_COLUMN_POSITION));
     }
 
+    @Disabled
     @Test
     public void shouldNotEnrichValidEvent() {
         // given: execution environment

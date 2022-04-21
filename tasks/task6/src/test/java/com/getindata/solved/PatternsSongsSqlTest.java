@@ -8,6 +8,7 @@ import org.apache.flink.test.util.MiniClusterWithClientResource;
 import org.apache.flink.types.Row;
 import org.apache.flink.util.CloseableIterator;
 import org.junit.ClassRule;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ class PatternsSongsSqlTest {
                     .build()
     );
 
+    @Disabled
     @Test
     public void shouldNotFindPattern() {
         // given: execution environment
@@ -48,6 +50,7 @@ class PatternsSongsSqlTest {
         assertEquals(0, foundSongs.size());
     }
 
+    @Disabled
     @Test
     public void shouldFindPattern() {
         // given: execution environment
