@@ -59,7 +59,10 @@ services:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
 
   schema-registry:
+    # Use confluent image for architectures other than ARM
     image: confluentinc/cp-schema-registry:6.0.1
+    # Uncomment for ARM architecture
+    # image: eugenetea/schema-registry-arm64:latest
     ports:
       - "8082:8082"
     expose:
