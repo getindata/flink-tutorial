@@ -56,10 +56,10 @@ public class EnrichSongsSql {
                         "   'connector' = 'kafka'," +
                         "   'topic' = '" + KafkaProperties.INPUT_AVRO_TOPIC + "'," +
                         "   'properties.group.id' = 'flink_tutorial'," +
-                        "   'properties.bootstrap.servers' = 'kafka:9092'," +
+                        "   'properties.bootstrap.servers' = 'localhost:29092'," +
                         "   'scan.startup.mode' = 'earliest-offset'," +
                         "   'value.format' = 'avro-confluent'," +
-                        "   'value.avro-confluent.schema-registry.url' = 'http://schema-registry:8082'" +
+                        "   'value.avro-confluent.schema-registry.url' = 'http://localhost:8082'" +
                         ")"
         );
     }
@@ -77,9 +77,9 @@ public class EnrichSongsSql {
                         ") WITH (\n" +
                         "   'connector' = 'kafka',\n" +
                         "   'topic' = '" + KafkaProperties.OUTPUT_SQL_AVRO_TOPIC + "',\n" +
-                        "   'properties.bootstrap.servers' = 'kafka:9092',\n" +
+                        "   'properties.bootstrap.servers' = 'localhost:29092',\n" +
                         "   'value.format' = 'avro-confluent',\n" +
-                        "   'value.avro-confluent.schema-registry.url' = 'http://schema-registry:8082',\n" +
+                        "   'value.avro-confluent.schema-registry.url' = 'http://localhost:8082',\n" +
                         "   'value.avro-confluent.schema-registry.subject' = 'EnrichedSongEventAvro'\n" +
                         ")"
         );
