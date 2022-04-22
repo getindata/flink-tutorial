@@ -48,7 +48,7 @@ public class AdvancedTimeHandling {
 
         @Override
         public WatermarkGenerator<EnrichedSongEvent> createWatermarkGenerator(WatermarkGeneratorSupplier.Context context) {
-            return new WatermarkGenerator<EnrichedSongEvent>() {
+            return new WatermarkGenerator<>() {
                 @Override
                 public void onEvent(EnrichedSongEvent songEvent, long eventTimestamp, WatermarkOutput output) {
                     Watermark watermark = songEvent.getUserId() % 2 == 1

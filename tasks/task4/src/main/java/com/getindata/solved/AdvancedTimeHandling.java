@@ -48,7 +48,7 @@ public class AdvancedTimeHandling {
 
         @Override
         public WatermarkGenerator<EnrichedSongEvent> createWatermarkGenerator(WatermarkGeneratorSupplier.Context context) {
-            return new WatermarkGenerator<EnrichedSongEvent>() {
+            return new WatermarkGenerator<>() {
                 @Override
                 public void onEvent(EnrichedSongEvent songEvent, long eventTimestamp, WatermarkOutput output) {
                     Watermark watermark = songEvent.getUserId() % 2 == 1
@@ -118,6 +118,7 @@ public class AdvancedTimeHandling {
                 // Initialize state.
                 counterState.update(1);
                 lastTimestampState.update(context.timestamp());
+                context.timerService().registerEventTimeTimer(context.timestamp() + FIFTEEN_MINUTES);
             } else {
                 currentCounter++;
                 LOG.debug("A user {} listens to a next ({}) The Rolling Stones song.", context.getCurrentKey(), currentCounter);
