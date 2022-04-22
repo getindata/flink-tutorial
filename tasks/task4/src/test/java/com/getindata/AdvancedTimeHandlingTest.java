@@ -49,10 +49,38 @@ class AdvancedTimeHandlingTest {
         assertEquals(new SongCount(10, 3), output.get(0));
     }
 
+    @Disabled("Disabled until AdvancedTimeHandling is implemented")
+    @Test
+    void shouldNotEmitNotificationIfTheGapAfterTheFirstEventIsTooLong() throws Exception {
+        SongCountingProcessFunction function = new SongCountingProcessFunction();
+        KeyedOneInputStreamOperatorTestHarness<Integer, EnrichedSongEvent, SongCount> harness = getHarness(function);
+
+        harness.open();
+
+        harness.processElement(
+                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T12:00:00.0Z").toEpochMilli()).build(),
+                Instant.parse("2020-02-10T12:00:00.0Z").toEpochMilli()
+        );
+        // the gap is longer than 15 min
+        harness.processWatermark(Instant.parse("2020-02-10T12:19:00.0Z").toEpochMilli());
+        harness.processElement(
+                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T12:20:00.0Z").toEpochMilli()).build(),
+                Instant.parse("2020-02-10T12:20:00.0Z").toEpochMilli()
+        );
+        harness.processElement(
+                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T12:21:00.0Z").toEpochMilli()).build(),
+                Instant.parse("2020-02-10T12:21:00.0Z").toEpochMilli()
+        );
+        harness.processWatermark(Instant.parse("2020-02-10T13:00:00.0Z").toEpochMilli());
+
+        List<SongCount> output = getResults(harness);
+
+        assertEquals(0, output.size());
+    }
 
     @Disabled("Disabled until AdvancedTimeHandling is implemented")
     @Test
-    void shouldNotEmitNotificationIfGapBetweenSongsIsTooLong() throws Exception {
+    void shouldNotEmitNotificationIfTheGapAfterTheSecondEventIsTooLong() throws Exception {
         SongCountingProcessFunction function = new SongCountingProcessFunction();
         KeyedOneInputStreamOperatorTestHarness<Integer, EnrichedSongEvent, SongCount> harness = getHarness(function);
 
@@ -63,20 +91,88 @@ class AdvancedTimeHandlingTest {
                 Instant.parse("2020-02-10T12:00:00.0Z").toEpochMilli()
         );
         harness.processElement(
-                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T12:05:00.0Z").toEpochMilli()).build(),
-                Instant.parse("2020-02-10T12:05:00.0Z").toEpochMilli()
+                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T12:01:00.0Z").toEpochMilli()).build(),
+                Instant.parse("2020-02-10T12:01:00.0Z").toEpochMilli()
         );
-        // gap is longer than 15 minutes
-        harness.processWatermark(Instant.parse("2020-02-10T12:25:00.0Z").toEpochMilli());
+        // the gap is longer than 15 min
+        harness.processWatermark(Instant.parse("2020-02-10T12:19:00.0Z").toEpochMilli());
         harness.processElement(
-                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T12:30:00.0Z").toEpochMilli()).build(),
-                Instant.parse("2020-02-10T12:30:00.0Z").toEpochMilli()
+                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T12:21:00.0Z").toEpochMilli()).build(),
+                Instant.parse("2020-02-10T12:21:00.0Z").toEpochMilli()
         );
-        harness.processWatermark(Instant.parse("2020-02-10T12:25:00.0Z").toEpochMilli());
+        harness.processWatermark(Instant.parse("2020-02-10T13:00:00.0Z").toEpochMilli());
 
         List<SongCount> output = getResults(harness);
 
         assertEquals(0, output.size());
+    }
+
+    @Disabled("Disabled until AdvancedTimeHandling is implemented")
+    @Test
+    void shouldNotEmitNotificationIfThereAreOnlyTwoEvents() throws Exception {
+        SongCountingProcessFunction function = new SongCountingProcessFunction();
+        KeyedOneInputStreamOperatorTestHarness<Integer, EnrichedSongEvent, SongCount> harness = getHarness(function);
+
+        harness.open();
+
+        harness.processElement(
+                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T12:00:00.0Z").toEpochMilli()).build(),
+                Instant.parse("2020-02-10T12:00:00.0Z").toEpochMilli()
+        );
+        harness.processElement(
+                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T12:01:00.0Z").toEpochMilli()).build(),
+                Instant.parse("2020-02-10T12:01:00.0Z").toEpochMilli()
+        );
+        harness.processWatermark(Instant.parse("2020-02-10T13:00:00.0Z").toEpochMilli());
+
+        List<SongCount> output = getResults(harness);
+
+        assertEquals(0, output.size());
+    }
+
+    @Disabled("Disabled until AdvancedTimeHandling is implemented")
+    @Test
+    void shouldEmitTwoNotificationsIfThereAreTwoSessionsWithThreeListenings() throws Exception {
+        SongCountingProcessFunction function = new SongCountingProcessFunction();
+        KeyedOneInputStreamOperatorTestHarness<Integer, EnrichedSongEvent, SongCount> harness = getHarness(function);
+
+        harness.open();
+
+        // the first session
+        harness.processElement(
+                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T12:00:00.0Z").toEpochMilli()).build(),
+                Instant.parse("2020-02-10T12:00:00.0Z").toEpochMilli()
+        );
+        harness.processElement(
+                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T12:05:00.0Z").toEpochMilli()).build(),
+                Instant.parse("2020-02-10T12:05:00.0Z").toEpochMilli()
+        );
+        harness.processElement(
+                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T12:10:00.0Z").toEpochMilli()).build(),
+                Instant.parse("2020-02-10T12:10:00.0Z").toEpochMilli()
+        );
+        harness.processWatermark(Instant.parse("2020-02-10T12:25:00.0Z").toEpochMilli());
+
+        // the second session
+        harness.processElement(
+                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T13:00:00.0Z").toEpochMilli()).build(),
+                Instant.parse("2020-02-10T13:00:00.0Z").toEpochMilli()
+        );
+        harness.processElement(
+                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T13:05:00.0Z").toEpochMilli()).build(),
+                Instant.parse("2020-02-10T13:05:00.0Z").toEpochMilli()
+        );
+        harness.processElement(
+                aRollingStonesSongEvent().setUserId(10).setTimestamp(Instant.parse("2020-02-10T13:10:00.0Z").toEpochMilli()).build(),
+                Instant.parse("2020-02-10T13:10:00.0Z").toEpochMilli()
+        );
+        harness.processWatermark(Instant.parse("2020-02-10T13:25:00.0Z").toEpochMilli());
+
+        List<SongCount> output = getResults(harness);
+
+        assertEquals(2, output.size());
+        assertEquals(new SongCount(10, 3), output.get(0));
+        assertEquals(new SongCount(10, 3), output.get(1));
     }
 
 
