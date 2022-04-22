@@ -9,20 +9,19 @@ import org.apache.flink.formats.avro.registry.confluent.ConfluentRegistryAvroSer
 
 public class GenerationJobAvro extends GenerationHelper<SongEventAvro> {
 
-    protected GenerationJobAvro(String topic, KafkaRecordSerializationSchema<SongEventAvro> serializer) {
-        super(topic, serializer);
+    protected GenerationJobAvro(KafkaRecordSerializationSchema<SongEventAvro> serializer) {
+        super(serializer);
     }
 
     public static void main(String[] args) throws Exception {
         GenerationJobAvro job = new GenerationJobAvro(
-                KafkaProperties.INPUT_AVRO_TOPIC,
                 KafkaRecordSerializationSchema.<SongEventAvro>builder()
-                        .setTopic(KafkaProperties.INPUT_AVRO_TOPIC)
+                        .setTopic(KafkaProperties.getInputAvroTopic())
                         .setValueSerializationSchema(
                                 ConfluentRegistryAvroSerializationSchema.forSpecific(
                                         SongEventAvro.class,
                                         SongEventAvro.class.getSimpleName(),
-                                        KafkaProperties.SCHEMA_REGISTRY_URL)
+                                        KafkaProperties.getSchemaRegistryUrl())
                         )
                         .build()
         );

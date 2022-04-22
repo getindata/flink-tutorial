@@ -6,14 +6,14 @@ import org.apache.flink.connector.kafka.sink.KafkaRecordSerializationSchema;
 
 public class GenerationJob extends GenerationHelper<SongEvent> {
     protected GenerationJob(String topic, KafkaRecordSerializationSchema<SongEvent> serializer) {
-        super(topic, serializer);
+        super(serializer);
     }
 
     public static void main(String[] args) throws Exception {
         GenerationJob job = new GenerationJob(
-                KafkaProperties.INPUT_TOPIC,
+                KafkaProperties.getInputTopic(),
                 KafkaRecordSerializationSchema.<SongEvent>builder()
-                        .setTopic(KafkaProperties.INPUT_TOPIC)
+                        .setTopic(KafkaProperties.getInputTopic())
                         .build()
         );
 
