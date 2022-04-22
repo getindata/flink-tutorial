@@ -12,11 +12,10 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import java.io.Serializable;
 
 public abstract class GenerationHelper<T> implements Serializable {
-    private final String topic;
+
     private final KafkaRecordSerializationSchema<T> serializer;
 
-    protected GenerationHelper(String topic, KafkaRecordSerializationSchema<T> serializer) {
-        this.topic = topic;
+    protected GenerationHelper(KafkaRecordSerializationSchema<T> serializer) {
         this.serializer = serializer;
     }
 
@@ -27,7 +26,7 @@ public abstract class GenerationHelper<T> implements Serializable {
                 .map(this::map, TypeInformation.of(getConcreteClass()));
 
         final KafkaSink<T> sink = KafkaSink.<T>builder()
-                .setBootstrapServers(KafkaProperties.BOOTSTRAP_SERVERS)
+                .setBootstrapServers(KafkaProperties.getBootstrapServers())
                 .setRecordSerializer(serializer)
                 .build();
 

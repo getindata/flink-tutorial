@@ -36,27 +36,27 @@ public class KafkaWindowAggregations {
         final StreamExecutionEnvironment sEnv = StreamExecutionEnvironment.getExecutionEnvironment();
 
         final KafkaSource<SongEventAvro> source = KafkaSource.<SongEventAvro>builder()
-                .setBootstrapServers(KafkaProperties.BOOTSTRAP_SERVERS)
-                .setTopics(KafkaProperties.INPUT_AVRO_TOPIC)
-                .setGroupId(KafkaProperties.GROUP_ID)
+                .setBootstrapServers(KafkaProperties.getBootstrapServers())
+                .setTopics(KafkaProperties.getInputAvroTopic())
+                .setGroupId(KafkaProperties.getGroupId())
                 .setStartingOffsets(OffsetsInitializer.earliest())
                 .setValueOnlyDeserializer(
                         ConfluentRegistryAvroDeserializationSchema.forSpecific(
                                 SongEventAvro.class,
-                                KafkaProperties.SCHEMA_REGISTRY_URL)
+                                KafkaProperties.getSchemaRegistryUrl())
                 )
                 .build();
 
         final KafkaSink<UserStatisticsAvro> sink = KafkaSink.<UserStatisticsAvro>builder()
-                .setBootstrapServers(KafkaProperties.BOOTSTRAP_SERVERS)
+                .setBootstrapServers(KafkaProperties.getBootstrapServers())
                 .setRecordSerializer(
                         KafkaRecordSerializationSchema.<UserStatisticsAvro>builder()
-                                .setTopic(KafkaProperties.OUTPUT_AVRO_TOPIC)
+                                .setTopic(KafkaProperties.getOutputAvroTopic())
                                 .setValueSerializationSchema(
                                         ConfluentRegistryAvroSerializationSchema.forSpecific(
                                                 UserStatisticsAvro.class,
                                                 UserStatisticsAvro.class.getSimpleName(),
-                                                KafkaProperties.SCHEMA_REGISTRY_URL)
+                                                KafkaProperties.getSchemaRegistryUrl())
                                 )
                                 .build()
                 )
@@ -72,11 +72,8 @@ public class KafkaWindowAggregations {
 
     @VisibleForTesting
     static DataStream<UserStatisticsAvro> pipeline(DataStream<SongEventAvro> source) {
-        final DataStream<SongEventAvro> eventsInEventTime = source.assignTimestampsAndWatermarks(
-                new SongWatermarkStrategy());
-
         // song plays in user sessions
-        final WindowedStream<SongEventAvro, Integer, TimeWindow> windowedStream = eventsInEventTime
+        final WindowedStream<SongEventAvro, Integer, TimeWindow> windowedStream = source
                 .keyBy(new UserIdSelector())
                 .window(EventTimeSessionWindows.withGap(Time.minutes(20)));
 

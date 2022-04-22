@@ -54,12 +54,12 @@ public class EnrichSongsSql {
                         "   userId INT" +
                         ") WITH (" +
                         "   'connector' = 'kafka'," +
-                        "   'topic' = '" + KafkaProperties.INPUT_AVRO_TOPIC + "'," +
+                        "   'topic' = '" + KafkaProperties.getInputAvroTopic() + "'," +
                         "   'properties.group.id' = 'flink_tutorial'," +
-                        "   'properties.bootstrap.servers' = 'localhost:29092'," +
+                        "   'properties.bootstrap.servers' = '" + KafkaProperties.getBootstrapServers() + "'," +
                         "   'scan.startup.mode' = 'earliest-offset'," +
                         "   'value.format' = 'avro-confluent'," +
-                        "   'value.avro-confluent.schema-registry.url' = 'http://localhost:8082'" +
+                        "   'value.avro-confluent.schema-registry.url' = '" + KafkaProperties.getSchemaRegistryUrl() + "'" +
                         ")"
         );
     }
@@ -76,10 +76,10 @@ public class EnrichSongsSql {
                         "   length INT\n" +
                         ") WITH (\n" +
                         "   'connector' = 'kafka',\n" +
-                        "   'topic' = '" + KafkaProperties.OUTPUT_SQL_AVRO_TOPIC + "',\n" +
-                        "   'properties.bootstrap.servers' = 'localhost:29092',\n" +
+                        "   'topic' = '" + KafkaProperties.getOutputSqlAvroTopic() + "',\n" +
+                        "   'properties.bootstrap.servers' = '" + KafkaProperties.getBootstrapServers() + "'," +
                         "   'value.format' = 'avro-confluent',\n" +
-                        "   'value.avro-confluent.schema-registry.url' = 'http://localhost:8082',\n" +
+                        "   'value.avro-confluent.schema-registry.url' = '" + KafkaProperties.getSchemaRegistryUrl() + "'" +
                         "   'value.avro-confluent.schema-registry.subject' = 'EnrichedSongEventAvro'\n" +
                         ")"
         );
