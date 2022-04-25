@@ -19,8 +19,8 @@ class EnrichSongsTest {
     @Disabled("Disabled until EnrichmentFunction is implemented")
     @Test
     void shouldEnrichExistingSong() throws Exception {
-        // todo: build a test object here
         SongEvent event = aRawSongEvent()
+                .setSongId(2)
                 .build();
         enrichmentFunction.open(new Configuration());
 
@@ -32,8 +32,15 @@ class EnrichSongsTest {
 
     @Disabled("Disabled until EnrichmentFunction is implemented")
     @Test
-    void shouldFilterIrrelevantSong() {
-        // todo: put your code here
+    void shouldFilterIrrelevantSong() throws Exception {
+        SongEvent event = aRawSongEvent()
+                .setSongId(1000)
+                .build();
+        enrichmentFunction.open(new Configuration());
+
+        Either<SongEvent, EnrichedSongEvent> result = enrichmentFunction.map(event);
+
+        assertTrue(result.isLeft());
     }
 
 }
