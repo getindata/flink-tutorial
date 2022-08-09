@@ -10,12 +10,12 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <flink.version>1.14.4</flink.version>
+        <flink.version>1.15.1</flink.version>
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
         <project.version>1.0-SNAPSHOT</project.version>
         <scala.baseVersion>2.12</scala.baseVersion>
-        <junit.version>5.7.0</junit.version>
+        <junit.version>5.9.0</junit.version>
         <avro.version>1.10.1</avro.version>
     </properties>
 
@@ -33,12 +33,12 @@
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-streaming-java_${scala.baseVersion}</artifactId>
+            <artifactId>flink-streaming-java</artifactId>
             <version>${flink.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-clients_${scala.baseVersion}</artifactId>
+            <artifactId>flink-clients</artifactId>
             <version>${flink.version}</version>
         </dependency>
         <dependency>
@@ -48,7 +48,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-table-api-java-bridge_${scala.baseVersion}</artifactId>
+            <artifactId>flink-table-api-java-bridge</artifactId>
             <version>${flink.version}</version>
         </dependency>
         <dependency>
@@ -58,12 +58,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-streaming-scala_${scala.baseVersion}</artifactId>
-            <version>${flink.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-kafka_${scala.baseVersion}</artifactId>
+            <artifactId>flink-connector-kafka</artifactId>
             <version>${flink.version}</version>
         </dependency>
         <dependency>
@@ -73,7 +68,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-cep_${scala.baseVersion}</artifactId>
+            <artifactId>flink-cep</artifactId>
             <version>${flink.version}</version>
         </dependency>
 
@@ -98,13 +93,13 @@
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-test-utils_${scala.baseVersion}</artifactId>
+            <artifactId>flink-test-utils</artifactId>
             <version>${flink.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-streaming-java_${scala.baseVersion}</artifactId>
+            <artifactId>flink-streaming-java</artifactId>
             <version>${flink.version}</version>
             <scope>test</scope>
             <classifier>tests</classifier>
@@ -131,19 +126,13 @@
                 </dependency>
                 <dependency>
                     <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-streaming-java_${scala.baseVersion}</artifactId>
+                    <artifactId>flink-streaming-java</artifactId>
                     <version>${flink.version}</version>
                     <scope>provided</scope>
                 </dependency>
                 <dependency>
                     <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-streaming-scala_${scala.baseVersion}</artifactId>
-                    <version>${flink.version}</version>
-                    <scope>provided</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.flink</groupId>
-                    <artifactId>flink-clients_${scala.baseVersion}</artifactId>
+                    <artifactId>flink-clients</artifactId>
                     <version>${flink.version}</version>
                     <scope>provided</scope>
                 </dependency>
@@ -267,21 +256,21 @@
                                     <exclude>org.apache.flink:flink-shaded-curator-recipes</exclude>
                                     <exclude>org.apache.flink:flink-core</exclude>
                                     <exclude>org.apache.flink:flink-java</exclude>
-                                    <exclude>org.apache.flink:flink-scala_${scala.baseVersion}</exclude>
-                                    <exclude>org.apache.flink:flink-runtime_${scala.baseVersion}</exclude>
-                                    <exclude>org.apache.flink:flink-optimizer_${scala.baseVersion}</exclude>
-                                    <exclude>org.apache.flink:flink-clients_${scala.baseVersion}</exclude>
-                                    <exclude>org.apache.flink:flink-avro_${scala.baseVersion}</exclude>
-                                    <exclude>org.apache.flink:flink-examples-batch_${scala.baseVersion}</exclude>
-                                    <exclude>org.apache.flink:flink-examples-streaming_${scala.baseVersion}</exclude>
-                                    <exclude>org.apache.flink:flink-streaming-java_${scala.baseVersion}</exclude>
-                                    <exclude>org.apache.flink:flink-streaming-scala_${scala.baseVersion}</exclude>
-                                    <exclude>org.apache.flink:flink-scala-shell_${scala.baseVersion}</exclude>
+                                    <exclude>org.apache.flink:flink-scala</exclude>
+                                    <exclude>org.apache.flink:flink-runtime</exclude>
+                                    <exclude>org.apache.flink:flink-optimizer</exclude>
+                                    <exclude>org.apache.flink:flink-clients</exclude>
+                                    <exclude>org.apache.flink:flink-cep</exclude>
+                                    <exclude>org.apache.flink:flink-examples-batch</exclude>
+                                    <exclude>org.apache.flink:flink-examples-streaming</exclude>
+                                    <exclude>org.apache.flink:flink-streaming-java</exclude>
+                                    <exclude>org.apache.flink:flink-streaming-scala</exclude>
+                                    <exclude>org.apache.flink:flink-scala-shell</exclude>
                                     <exclude>org.apache.flink:flink-python</exclude>
                                     <exclude>org.apache.flink:flink-metrics-core</exclude>
                                     <exclude>org.apache.flink:flink-metrics-jmx</exclude>
-                                    <exclude>org.apache.flink:flink-statebackend-rocksdb_${scala.baseVersion}</exclude>
-                                    <exclude>org.apache.flink:flink-table_${scala.baseVersion}</exclude>
+                                    <exclude>org.apache.flink:flink-statebackend-rocksdb</exclude>
+                                    <exclude>org.apache.flink:flink-table</exclude>
 
                                     <!-- Also exclude very big transitive dependencies of Flink
 
@@ -369,7 +358,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.10.1</version>
                 <configuration>
                     <source>11</source>
                     <target>11</target>
@@ -378,7 +367,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.0.0-M7</version>
             </plugin>
         </plugins>
         <pluginManagement>

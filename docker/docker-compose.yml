@@ -26,7 +26,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   jobmanager:
-    image: flink:1.14.4-scala_2.12-java11
+    image: flink:1.15.1-scala_2.12-java11
     expose:
       - "6123"
     ports:
@@ -36,7 +36,7 @@ services:
       - JOB_MANAGER_RPC_ADDRESS=jobmanager
 
   taskmanager:
-    image: flink:1.14.4-scala_2.12-java11
+    image: flink:1.15.1-scala_2.12-java11
     expose:
       - "6121"
       - "6122"
@@ -49,13 +49,13 @@ services:
       - |
         FLINK_PROPERTIES=
         jobmanager.rpc.address: jobmanager
-        taskmanager.numberOfTaskSlots: 2
+        taskmanager.numberOfTaskSlots: 3
 
   sql-client:
     build:
       context: ./sql-client/
       args:
-        FLINK_VERSION: 1.14.4
+        FLINK_VERSION: 1.15.1
     depends_on:
       - jobmanager
     environment:
